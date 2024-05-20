@@ -1,0 +1,75 @@
+<!Doctype HTML>
+<html>
+    <head>
+        <title>Cognitest</title>
+		<link rel="icon" href="Images/image01.ico" type="image/x-icon">
+        <link rel="stylesheet" href="homepage.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
+        <style>
+            .shadow{
+                background: radial-gradient(circle, transparent 75%, black);
+                z-index: 0;
+}
+            .background{
+                background-image: url(Images/Brain\ pattern.svg);
+                background-size: 25%;
+                animation: pan 60s linear infinite; 
+                will-change: background-position;
+                z-index: 1;
+            }
+            @keyframes pan{
+            0% {
+                background-position: 0% 0%;   
+            }
+            
+            100% {
+                background-position: 100% 0%;
+            }
+            }
+        </style>
+    </head>
+    <body class="background" style="margin:0px;">
+        <header style="top:0px;" class="head" id="intro">
+            <div>
+                <h1 style="text-align: center; font-size: 100px;">CogniTest</h1>
+            </div>
+        </header>
+        <nav class="nav2">
+            <ul>
+                <li><a href="#intro"><div>Introduction</div></a></li>
+                <li><a href="#tests"><div>Tests</div></a></li>
+            </ul>
+        </nav>
+        <center>
+            <br>
+            <div class="introductionclass">
+                <p>The User Cognitive Tests website that will examine the users’ memory and cognitive abilities through different exams and cognitive tools. These exams provided will be interactive and dynamic, continuously getting more difficult as you improve and test yourself longer. Users will be able to see their scores for each test and see if they improved from their last attempt at testing themselves. This website’s purpose is to be a platform where the users can challenge themselves mentally, improve their cognitive skills, and see their results throughout the different interactive tools. </p>
+                <img src="Images/image01.png" alt="Cognitive1" class="image01">
+            </div>
+            <br>
+            <br>
+            <div style="height: 200px;width: 100%; justify-content: center; display: flex;justify-content: space-evenly;">
+                <div class="square-home">
+                    <a href="Reac.html"><img src="Images/image05.png" alt="image05"></a>
+                    <p>Reaction Time</p>
+                </div>
+                <div class="square-home">
+                    <a href="Num.html"><img src="Images/image02.png" alt="image02"></a>
+                    <p>Number Memory</p>
+                </div>
+                <div class="square-home">
+                    <a href="Pattern.html"><img src="Images/image04.png" alt="image04"></a>
+                    <p>Pattern Recognition</p>
+                </div>
+                <div  id="tests" class="square-home">
+                    <a href="Math.html"><img src="Images/image03.png" alt="image03"></a>
+                    <p>Arithmetic</p>
+                </div>
+            </div>  
+            <br>
+            <br>
+        </center>
+    </body>
+</html>

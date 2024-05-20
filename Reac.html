@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="icon" href="Images/image05.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
+    <title>Reaction Time Test</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            background-image: linear-gradient(90deg, #731de3, #6449ed, #5c65f2, #5e7cf2, #6a90ef, #8098ee, #92a0ec, #a2a9eb, #b6aaec, #caaaeb, #dcabe8, #ecace4);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+		
+		* {
+			font-family: "Madimi One", sans-serif;
+		}
+
+       #buttonContainer {
+    position: relative; 
+    height: 100vh;
+    width: 100vw;
+}
+
+
+
+.button-85 {
+    padding: 0.6em 2em;
+    border: none;
+    outline: none;
+    color: rgb(255, 255, 255);
+    background: #111;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    font-family: "Madimi One", sans-serif; 
+    margin: 20px;
+}
+
+.button-85:before {
+    content: "";
+    background: linear-gradient(
+        45deg,
+        #ff0000,
+        #ff7300,
+        #fffb00,
+        #48ff00,
+        #00ffd5,
+        #002bff,
+        #7a00ff,
+        #ff00c8,
+        #ff0000
+    );
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing-button-85 20s linear infinite;
+    transition: opacity 0.3s ease-in-out;
+    border-radius: 10px;
+}
+
+@keyframes glowing-button-85 {
+    0% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 400% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
+
+
+.button-85:after {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #222;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+}
+
+        #reactionButton {
+    display: none;
+    color: #ecf0f1;
+    font-size: 17px;
+    background-color: red;
+    border: 1px solid #f39c12;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px;
+    box-shadow: 0px 6px 0px #d35400;
+    transition: all 0.1s;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+        #startButton, #historyButton, #backButton {
+            margin: 20px;
+        }
+		#countdown {
+		font-family: "Madimi One", sans-serif;
+		font-size: 4em; 
+		text-align: center;
+		position: fixed;
+		top: 50%; 
+		left: 50%; 
+		transform: translate(-50%, -50%); 
+		z-index: 1; 
+		color: white;
+		}
+
+
+        #timeHistory {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        #timeHistory {
+            font-family: "Madimi One", sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="buttonContainer">
+        <button id="reactionButton">Click Me</button>
+    </div>
+    <div id="countdown"></div>
+    <div>
+    <button id="startButton" class="button-85">Start</button>
+	<button id="exitButton" class="button-85">Exit?</button>
+    <button id="historyButton" class="button-85" style="display: none;">View History</button>
+    <button id="backButton" class="button-85" style="display: none;">View Mean Score</button>
+	</div>
+    <div id="timeHistory"></div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const buttonContainer = document.getElementById('buttonContainer');
+    const reactionButton = document.getElementById('reactionButton');
+    const timeHistory = document.getElementById('timeHistory');
+    const countdownElement = document.getElementById('countdown');
+    const startButton = document.getElementById('startButton');
+    const exitButton = document.getElementById('exitButton');
+    const historyButton = document.getElementById('historyButton');
+    const backButton = document.getElementById('backButton');
+    let startTime = null;
+    let reactionTimes = [];
+    let gameStarted = false;
+    let gameTimeout = null;
+    let totalMeanScore = 0;
+
+    function randomPosition() {
+        const x = Math.floor(Math.random() * (window.innerWidth - reactionButton.offsetWidth));
+        const y = Math.floor(Math.random() * (window.innerHeight - reactionButton.offsetHeight));
+        reactionButton.style.left = `${x}px`;
+        reactionButton.style.top = `${y}px`;
+    }
+
+    function startCountdown(callback) {
+        let countdown = 3;
+        countdownElement.textContent = countdown;
+        const interval = setInterval(() => {
+            countdown--;
+            if (countdown === 0) {
+                clearInterval(interval);
+                countdownElement.textContent = '';
+                callback();
+            } else {
+                countdownElement.textContent = countdown;
+            }
+        }, 1000);
+    }
+
+    function startTest() {
+        if (!gameStarted) return;
+        startTime = performance.now();
+        reactionButton.style.display = 'block';
+        randomPosition();
+    }
+
+    exitButton.addEventListener('click', function() {
+        window.location.href = 'index.html';
+    });
+
+    function recordTime() {
+        if (!gameStarted) return;
+        const endTime = performance.now();
+        const reactionTime = endTime - startTime;
+        reactionTimes.push(reactionTime);
+        timeHistory.innerHTML = `<p>${reactionTime.toFixed(2)} ms</p>`;
+        reactionButton.style.display = 'none';
+        setTimeout(startTest, 1000); 
+    }
+
+    function calculateMean(times) {
+        const sum = times.reduce((acc, time) => acc + time, 0);
+        return sum / times.length;
+    }
+
+    function startGame() {
+        if (gameStarted) return;
+
+        gameStarted = true;
+        startButton.style.display = 'none'; 
+        historyButton.style.display = 'none'; 
+        backButton.style.display = 'none'; 
+        timeHistory.innerHTML = ''; 
+        reactionTimes = []; 
+
+        
+        exitButton.style.display = 'none';
+
+        startCountdown(() => {
+            gameTimeout = setTimeout(() => {
+                gameStarted = false;
+                reactionButton.style.display = 'none';
+                const meanTime = calculateMean(reactionTimes);
+                totalMeanScore = meanTime;
+                timeHistory.innerHTML = `<p>Mean Reaction Time: ${meanTime.toFixed(2)} ms</p>`;
+                historyButton.style.display = 'block'; 
+                backButton.style.display = 'block'; 
+                alert('Time is UP!');
+                startButton.style.display = 'block';                
+                exitButton.style.display = 'block';
+            }, 10000); 
+
+            reactionButton.style.display = 'block';
+            startTest(); 
+        });
+
+        reactionButton.style.display = 'block';
+    }
+
+    function displayHistory() {
+        if (reactionTimes.length === 0) {
+            alert('Did Not Click :(');
+            return;
+        }
+        const meanTimes = reactionTimes.map(time => time.toFixed(2) + ' ms').join('<br>');
+        timeHistory.innerHTML = `<p>Mean Reaction Time History:</p><p>${meanTimes}</p>`;
+        historyButton.style.display = 'none'; 
+        backButton.style.display = 'block'; 
+    }
+
+    function backToGame() {
+        timeHistory.innerHTML = `<p>Mean Reaction Time: ${totalMeanScore.toFixed(2)} ms</p>`;
+        backButton.style.display = 'none'; 
+        historyButton.style.display = 'block'; 
+    }
+
+    reactionButton.addEventListener('click', recordTime);
+    startButton.addEventListener('click', startGame);
+    historyButton.addEventListener('click', displayHistory);
+    backButton.addEventListener('click', backToGame);
+});
+
+    </script>
+</body>
+</html>

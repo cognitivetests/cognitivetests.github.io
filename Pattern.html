@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="icon" href="Images/image04.png" type="image/x-icon">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
+	 <title>Pattern Test</title>
+<style>
+.button{
+ height: 50px;
+ width: 50px;
+ font-size: 50px;
+ border: 2px solid;
+ text-align: center;
+ border-radius: 100%;	
+}
+table{
+ border-radius: 15px;
+ text-align: center;
+ border:2px solid #332744;
+ margin: auto;
+ border-spacing: 10px;
+ background-color: white;
+ box-shadow: 10px 5px #332744;
+}
+.back{
+    z-index: 1; height: 100%;width:100%;position:absolute; padding:0px;
+}
+.intro{
+    position:fixed; top:50%; left:50%;transform: translate(-50%, -50%);z-index: 1;
+    height:250px;
+    width:500px;
+	background: radial-gradient(#fec5c2,#af94ff);	
+	box-shadow: 0px 10px #332744;	
+    border-radius: 15px;
+    color:white;
+    display: flex;
+    padding: 5px;
+    text-align: center; font-size: 45px;
+            
+}
+*{
+	font-family: "Madimi One", sans-serif;
+}
+</style>
+</head>
+<body style="margin: 1px 0px 0px 0px; background-image: linear-gradient(90deg, #731de3, #6449ed, #5c65f2, #5e7cf2, #6a90ef, #8098ee, #92a0ec, #a2a9eb, #b6aaec, #caaaeb, #dcabe8, #ecace4);">
+<div  style=" background-color: rgba(235, 235, 255, 0.55);"id="start"class="back" onclick="play()"><div class="intro"><p style="color: #332744;margin:auto;">Are you ready? Click anywhere to start!</p></div></div>
+<div id="end"class="back" hidden="true" style="background-color: rgba(235, 235, 255, 0.55);">
+	<div class="intro">
+		<p id="final" style="margin:auto;"></p> <br>
+	</div>
+	<div style="position:absolute; top:75%; left:50%;transform: translate(-50%, -50%)">
+		<input type="button" onclick="play()" value="RETRY" style="height:75px; width:150px;border-radius: 15px;border:3px solid;font-size: 100%;box-shadow: 0px 5px black;">
+		<input type="button" onclick="document.location='index.html'" value="EXIT" style="height:75px; width:150px;border-radius: 15px;border:3px solid;font-size: 100%;box-shadow: 0px 5px black;">
+	</div>
+</div>
+<center>
+	<div style="position:fixed; top:50%; left:50%;transform: translate(-50%, -50%);z-index: 0; width: 100%;">
+		<h1 id="timer" style="color: #332744;">Timer: 3</h1>
+		<table id="squares" hidden="true">
+		</table>
+		<br>
+	</div>
+
+</center>
+</body>
+<script>
+var display ="", box =1, tries = 1, randNum, randChoose = "", seconds = 3, time, array, check = 0, square = 3;
+
+
+function play(){
+	table();
+	if(document.getElementById('start').hidden == false){
+		document.getElementById('start').hidden=true;
+		timer();
+		goback();
+    }
+    else
+	{
+        document.getElementById('start').hidden = false;
+        document.getElementById('end').hidden = true;
+    }	
+}
+
+function table(){
+	display = "";
+	box = 1;
+	document.getElementById('squares').hidden=false;
+	if(tries == 5)
+	{
+		square = 5;
+	}
+	else if (tries == 10)
+	{
+		square = 6;
+	}
+	for(var i = 0; i < square; i++)
+	{
+		display += "<tr>";
+		for(var j = 0; j < square; j++)
+		{
+			display += '<td><input type="button" data-value="wrong" disabled="true" onclick="clickRight('+"\'box"+box+"'"+')" id="box'+box+'"class="button"></td>';
+			box++;
+		}
+		display += "\n</tr>";
+	}
+	document.getElementById('squares').innerHTML=display;
+}
+
+function goback(){
+	for(var i = 0; i < tries; i++)
+	{
+		randNum = Math.floor((Math.random() * (square*square)) + 1);
+		randChoose += randNum.toString() + " ";
+		document.getElementById('box'+randNum).style.backgroundColor = "red";
+		document.getElementById('box'+randNum).setAttribute('data-value','correct');
+		console.log(tries);
+	}
+
+	array = randChoose.split(" ");
+
+	setTimeout(function() {
+        for (let i = 0; i < tries; i++) 
+		{
+			let currentBox = "box" + array[i];
+    		document.getElementById(currentBox).style.backgroundColor = "white";
+			document.getElementById(currentBox).addEventListener("click",function(){ clickGuess(currentBox);});
+		}
+		randChoose = "";
+    }, 3000);
+}
+
+function clickGuess(boxId1){
+	if(document.getElementById(boxId1).style.backgroundColor != "white")
+	{
+		check++;
+		console.log(check);
+		if(check == tries){
+			tries++;
+			play();
+			check=0;
+		}
+	}
+	else
+	{
+		check--;
+	}
+}
+
+function clickRight(boxId2){
+	if(document.getElementById(boxId2).style.backgroundColor != "black")
+	{
+		document.getElementById(boxId2).style.backgroundColor ="black";
+	}
+	else if(document.getElementById(boxId2).style.backgroundColor != "white")
+	{
+		document.getElementById(boxId2).style.backgroundColor ="white";
+	}
+
+	if(document.getElementById(boxId2).getAttribute('data-value')== "wrong")
+	{
+		document.getElementById('end').hidden = false;
+        document.getElementById('final').innerHTML="Round: "+ tries +"<br>Try again?";
+		display = ""; box =1; tries = 1; randNum = 0; randChoose = ""; seconds = 3; time =""; array = ""; check = 0; square = 3;
+	}
+}
+
+function timer(){
+	clearInterval(time);
+	document.getElementById('timer').innerHTML = "Timer: " + seconds;
+	time = setInterval(function() {
+        var newtime = seconds-1; 
+		document.getElementById('timer').innerHTML = "Timer: " + newtime; 
+		seconds = newtime;
+		if (newtime === 0) {
+        	clearInterval(time);
+			seconds = 3;
+			document.getElementById('timer').innerHTML = '&nbsp';
+			for(var i = 1; i <= square*square; i++)
+			{
+				document.getElementById("box"+i).style.backgroundColor ="white";
+				document.getElementById("box"+i).disabled = false;
+			}
+			
+		}
+	}, 1000);	
+}
+</script>

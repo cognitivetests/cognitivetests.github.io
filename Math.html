@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<title>Arithmetic Test</title>
+		<link rel="icon" href="Images/image03.png" type="image/x-icon">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Madimi+One&display=swap" rel="stylesheet">
+    <style>
+        .slot{
+            border-spacing: 20px 0px;
+        }
+        *{
+            color: #332744;
+            font-family: "Madimi One", sans-serif;  
+        }
+        .box{
+            height:100px;
+            width:100px;
+            border-radius: 15px;
+            border: solid;
+            font-size: 50px;
+            background-color: White;
+            text-align: center;
+            box-shadow: 0px 5px black;
+        }
+        .intro{
+            position:fixed; top:50%; left:50%;transform: translate(-50%, -50%);z-index: 1;
+            height:250px;
+            width:500px;
+            background-image: linear-gradient(90deg, #731de3, #6449ed, #5c65f2, #5e7cf2, #6a90ef, #8098ee, #92a0ec, #a2a9eb, #b6aaec, #caaaeb, #dcabe8, #ecace4);
+            border-radius: 15px;
+            color:white;
+            display: flex;
+            padding: 5px;
+            box-shadow: 0px 10px #332744;
+            text-align: center; font-size: 45px;
+            
+        }
+        .back{
+            background-color: rgba(235, 235, 255, 0.75); z-index: 1; height: 100%;width:100%;position:absolute; padding:0px;
+        }
+    </style>
+ </head>
+<body style="margin:1px 0px 0px 0px; background-image: linear-gradient(90deg, #731de3, #6449ed, #5c65f2, #5e7cf2, #6a90ef, #8098ee, #92a0ec, #a2a9eb, #b6aaec, #caaaeb, #dcabe8, #ecace4);;""> 
+    <div id="start"class="back" onclick="hide()"><div class="intro"><p style="color: #332744;margin:auto;">Click Anywhere to Start</p></div></div>
+    <div id="end"class="back" hidden="true" onclick="">
+        <div class="intro">
+            <p id="final" style="margin:auto;"></p> <br>
+        </div>
+        <div style="position:absolute; top:75%; left:50%;transform: translate(-50%, -50%)">
+            <input type="button" onclick="hide()" value="RETRY" style="height:75px; width:150px;border-radius: 15px;border:3px solid;font-size: 100%;box-shadow: 0px 5px black;">
+            <input type="button" onclick="document.location='index.html'" value="EXIT" style="height:75px; width:150px;border-radius: 15px;border:3px solid;font-size: 100%;box-shadow: 0px 5px black;">
+        </div>
+    </div>
+    <center>
+    <div class="all" style="position:fixed; top:50%; left:50%;transform: translate(-50%, -50%);z-index: 0; width: 100%;">
+        <h1>Timer:</h1L>
+        <h1 id="count">60</h1>
+        <h1 id="score">Score: 0</h1>
+        <table class="slot">
+            <tr>
+                <td class="box"><div id="num1"></div></td>
+                <td class="box"><div id="oper"></div></td>
+                <td class="box"><div id="num2"></div></td>
+                <td style="font-size: 50px;">=</td>
+                <td class="box"><div id="text"><input id="answer" type="number" style="height:75px; width:150px; border:none;font-size: 50px;"></div></td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <input type="button" onclick="next()" value="SUBMIT" style="height:75px; width:150px;border-radius: 15px;border:3px solid;font-size: 100%;box-shadow: 0px 5px black;">
+    </div>
+     </center>
+</body>
+<script>
+    var score =0, num1, num2,oper,guess, count, time;
+    var operation = ["+", "×","-","÷"];
+    function hide(){
+        if(document.getElementById('start').hidden == false){
+            document.getElementById('start').hidden=true;
+            clearInterval(time);
+            time = setInterval(timer, 1000);
+            num1 = Math.floor(Math.random() * 101);
+            num2 = Math.floor(Math.random() * 101);
+            oper = operation[Math.floor(Math.random() * 4)];
+            document.getElementById('num1').innerHTML = num1;
+            document.getElementById('oper').innerHTML = oper;
+            document.getElementById('num2').innerHTML = num2;
+        }
+        else{
+            document.getElementById('start').hidden = false;
+            document.getElementById('end').hidden = true;
+        }
+    }
+    function next(){
+        count = parseInt(document.getElementById('count').innerHTML);
+        if(document.getElementById('answer').value != "" && count > 0){
+            guess = document.getElementById('answer').value;
+            if(answer(num1,oper,num2,guess)){
+                num1 = Math.floor(Math.random() * 101);
+                num2 = Math.floor(Math.random() * 101);
+                oper = operation[Math.floor(Math.random() * 4)];
+                document.getElementById('num1').innerHTML = num1;
+                document.getElementById('oper').innerHTML = oper;
+                document.getElementById('num2').innerHTML = num2;
+                document.getElementById('answer').value="";
+                score+= 100;
+                document.getElementById('score').innerHTML="Score: "+score;
+            }
+            else{
+                reset();
+            }
+        }
+        else
+        {
+            alert("No number found... Please Input a Number!");
+        }
+    }
+    function answer(w,x,y,z){
+        var answer
+        switch(x)
+        {
+            case "+":
+                answer = w + y;
+                break;
+            case "×":
+                answer = w * y;
+                break;
+            case "-":
+                answer = w - y;
+                break;
+            case "÷":
+                answer = w / y;
+                answer = parseFloat(answer.toFixed(2));
+                break;
+        }
+        if(answer == z)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    function timer(){
+        count = parseInt(document.getElementById('count').innerHTML);
+        var newtime = count-1;
+        document.getElementById('count').innerHTML = newtime;
+        if (newtime === 0) {
+            reset();
+        }
+    }
+
+    function reset(){
+        clearInterval(time);
+        document.getElementById('end').hidden = false;
+        document.getElementById('final').innerHTML="Final Score: "+score +"<br>Try again?";
+        score = 0;
+        num1 = 0; 
+        num2 = 0;
+        oper = "";
+        guess = 0;
+        document.getElementById('count').innerHTML = 60;
+        document.getElementById('answer').value="";
+        document.getElementById('score').innerHTML="Score: "+ 0;
+    }
+</script>
+</html>

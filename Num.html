@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="Images/image02.png" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Memory Test</title>
+    <style>
+        @font-face {
+            font-family: Motley;
+            src: url(fonts/MotleyForces.ttf);
+        }
+        body {
+            font-family: Motley;
+            background-image: linear-gradient(90deg, #731de3, #6449ed, #5c65f2, #5e7cf2, #6a90ef, #8098ee, #92a0ec, #a2a9eb, #b6aaec, #caaaeb, #dcabe8, #ecace4);
+            margin: 0;
+            padding: 0;
+        }
+        .boxDiv {
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .buttonDiv, .timerDiv, .numberDiv {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .startButton, .submitButton, .exitButton, .retryButton, .guessAnswer {
+            font-family: Motley;
+            border-radius: 12px;
+            background-color: white;
+            color: #8576FF;
+            font-size: 24px;
+            border: 2px solid black;
+            padding: 12px;
+            margin: 10px;
+        }
+        .numberDiv {
+            background-color: white;
+            color: #8576FF;
+            border-radius: 12px;
+            padding: 20px;
+            width: 50%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .timerDiv {
+            background-color: white;
+            color: #8576FF;
+            border-radius: 12px;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+            position: absolute;
+            top: 20%;
+        }
+        .statsDiv {
+            background-color: white;
+            color: #8576FF;
+            border-radius: 12px;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+            position: absolute;
+            top: 5%;
+            flex-direction: column;
+        }
+        .guessAnswer {
+            display: none;
+            font-size: 24px;
+            text-align: center;
+        }
+        @media only screen and (max-width: 768px) {
+            .startButton, .submitButton, .exitButton, .retryButton {
+                width: 100px;
+                height: 50px;
+                font-size: 18px;
+                position:absolute;
+                top:70%;
+            }
+            .numberDiv {
+                width: 100%;
+                position:absolute;
+                top:50%;
+            }
+            .timerDiv, .statsDiv {
+                width: 100px;
+                font-size: 14px;
+            }
+            .statsDiv{
+                Position:absolute;
+                top:2%;
+            }
+            .guessAnswer {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="boxDiv">
+        <div class="statsDiv">
+            <p class="points" id="pointsID">Points: 0</p>
+            <p class="lives" id="livesID">Lives: 3</p>
+        </div>
+
+        <div class="timerDiv" id="timerDivID">
+            <h1 class="Timer" style="margin-right: 10px;">Timer: </h1><br>
+            <h1 class="Timer" id="countdownTimer"></h1>
+        </div>
+
+        <div class="numberDiv">
+            <h1 class="generatedNumber" id="randomNumber"></h1>
+            <input type="number" class="guessAnswer" value="" id="guessAnswer2">
+        </div>
+
+        <div class="buttonDiv" id="buttonDivID">
+            <input type="button" class="startButton" id="startID" value="Start" onclick="Start()">
+            <input type="button" class="submitButton" id="submitID" value="Submit" onclick="answerNumber()" style="display:none;">
+            <input type="button" class="exitButton" id="exitID" value="Exit" onclick="exitGame()" style="display:none;">
+            <input type="button" class="retryButton" id="retryID" value="Retry" onclick="retryGame()" style="display:none;">
+        </div>
+    </div>
+
+    <script>
+        var randomNumber2 = "";
+        var randomNumber3 = ""; 
+        var Lives = 3;
+        var timerInterval;
+        var isAnswering = false;
+        var isWrong = false;
+        var Points = 0;
+
+        function Start() {
+            document.getElementById('exitID').style.display = "none";
+            document.getElementById('retryID').style.display = "none";
+            document.getElementById('startID').style.display = "none";
+            document.getElementById('guessAnswer2').value = "";
+            randomNumber2 = "";
+            generateNumber();
+        }
+
+        function generateNumber() {
+            document.getElementById('guessAnswer2').style.display = "none";
+            document.getElementById('submitID').style.display = "none";
+            document.getElementById('randomNumber').style.display = "flex";
+            document.getElementById('guessAnswer2').value = "0";
+            var min = 0;
+            var max = 9;
+            var randomNumber1 = Math.floor(Math.random() * (max - min + 1)) + min;
+            if (isWrong == true) {
+                randomNumber2 = randomNumber3;
+                randomNumber2 += randomNumber1.toString();
+            } else if (isWrong == false) {
+                randomNumber2 += randomNumber1.toString();
+            }
+            document.getElementById('randomNumber').innerText = randomNumber2;
+            countdownTimer();
+            isWrong = false;
+        }
+
+        function countdownTimer() {
+            document.getElementById('timerDivID').style.display = "flex";
+            var count = 3;
+            document.getElementById('countdownTimer').innerText = count;
+            timerInterval = setInterval(function () {
+                count--;
+                if (count >= 0 && !isAnswering) {
+                    document.getElementById('countdownTimer').innerText = count;
+                } else {
+                    clearInterval(timerInterval);
+                    document.getElementById('timerDivID').style.display = "none";
+                    document.getElementById('randomNumber').style.display = "none";
+                    document.getElementById('guessAnswer2').style.display = "flex";
+                    document.getElementById('submitID').style.display = "flex";
+                }
+            }, 1000);
+        }
+
+        function answerNumber() {
+            isAnswering = true;
+            var userAnswer = document.getElementById('guessAnswer2').value;
+            if (userAnswer == randomNumber2) {
+                generateNumber();
+                Points += 1;
+                document.getElementById('pointsID').innerHTML = "Points: " + Points;
+            } else {
+                Lives--;
+                document.getElementById('livesID').innerHTML = "Lives: " + Lives;
+                if (Lives == 0) {
+                    document.getElementById('exitID').style.display = "flex";
+                    document.getElementById('retryID').style.display = "flex";
+                    endGame();
+                } else {
+                    isWrong = true;
+                    randomNumber3 = randomNumber2.substring(0, randomNumber2.length - 1);
+                    generateNumber();
+                }
+            }
+            isAnswering = false;
+        }
+
+        function endGame() {
+            document.getElementById('submitID').style.display = "none";
+            document.getElementById('guessAnswer2').style.display = "none";
+        }
+
+        function exitGame() {
+            document.location = 'index.html';
+        }
+
+        function retryGame() {
+            randomNumber2 = "";
+            randomNumber3 = "";
+            Lives = 3;
+            timerInterval;
+            isAnswering = false;
+            isWrong = false;
+            Points = 0;
+            document.getElementById('randomNumber').innerHTML = "";
+            document.getElementById('pointsID').innerHTML = "Points: " + Points;
+        document.getElementById('livesID').innerHTML = "Lives: " + Lives;
+        document.getElementById('exitID').style.display = "none";
+        document.getElementById('retryID').style.display = "none";
+        document.getElementById('startID').style.display = "flex";
+    }
+</script>
+</html>

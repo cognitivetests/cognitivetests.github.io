@@ -1,0 +1,106 @@
+*
+{
+    font-family: "Madimi One", sans-serif;  
+    scroll-behavior: smooth;
+}
+.head{
+    height: 180px;
+    position: relative;
+    top: 0;
+    display: flex;
+    color:white;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(90deg, #731de3, #6449ed, #5c65f2, #5e7cf2, #6a90ef, #8098ee, #92a0ec, #a2a9eb, #b6aaec, #caaaeb, #dcabe8, #ecace4);
+}
+.nav2 {
+    z-index: 2;
+    display:block;
+    top: 180px;
+    text-align: center;
+    color: #636363;
+    padding: 1em;       
+    background-color: #332744;
+    cursor: default;
+}
+.nav2 ul {
+    margin: 0;
+    margin-right: 10px;
+    padding: 0;
+    list-style: none;
+}
+.nav2 ul li {
+    display: inline-block;
+    margin: 0 0.35em;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.nav2 ul li a {
+    display: inline-block;
+    height: 2.25em;
+    line-height: 2.25em;
+    padding: 0 1.25em;
+    font-size: 30px;
+    border: 0;
+    border-radius: 8px;
+    background-color: rgba(134, 105, 149, 0.25);
+    box-shadow: inset 0 0 0 1px transparent;
+    text-decoration: none;
+    color:white;
+}
+
+.introductionclass {
+    padding: 50px;
+    width: 75%;
+    align-items: center;
+    height: 250px;
+    background: radial-gradient(#7967cf, #759fdb);
+    border-radius: 20px;
+    justify-content: space-between;
+    box-shadow: 2px 2px 2px rgba(255, 255, 255, .3);
+    display: flex;
+}
+.introductionclass p{
+    display: inline-block;
+    text-align: justify;
+    color:white;
+    font-size: 100%;
+    width:70%;
+}
+.image01{
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+}
+.image02{
+    width: 50px;
+    height: 50px;
+    margin-left: 50px;
+    border-radius: 10px;
+}
+.square-home{
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(#7967cf, #759fdb);
+    border-radius: 20px;
+    border: 1px solid white;
+    box-shadow: 2px 2px 2px rgba(255, 255, 255, .3);
+    justify-content: center;
+    align-items: center;
+}
+
+.square-home a img{
+    width: 70%;
+    margin-top: 20px;
+    height: 70%;
+    border-radius: 10px;
+}
+.square-home p{
+    margin-top: 0px;
+    font-size: 20px;
+    color: white;
+}
+.nav2 a:hover {
+    color: #7967cf;
+}
