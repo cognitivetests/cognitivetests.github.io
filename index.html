@@ -20,14 +20,16 @@
                 z-index: 1;
             }
             @keyframes pan{
-            from {
-                background-position: 0% 0%;   
-            }
-            
-            to {
-                background-position: -75% 75%;
-            }
-            }
+		    0% {
+			    background-position: 0% 0%;
+		    }
+		    50% {
+			    background-position: 100% 100%;
+		    }
+		    100% {
+			    background-position: 0% 0%;
+		    }
+	    }
         </style>
     </head>
     <body class="background" style="margin:0px;">
