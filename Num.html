@@ -14,23 +14,28 @@
             background-image: linear-gradient(90deg, #731de3, #6449ed, #5c65f2, #5e7cf2, #6a90ef, #8098ee, #92a0ec, #a2a9eb, #b6aaec, #caaaeb, #dcabe8, #ecace4);
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
         .boxDiv {
-            margin: auto;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            width: 100%;
+            width: 90%;
+            max-width: 600px;
             padding: 20px;
             box-sizing: border-box;
         }
-        .buttonDiv, .timerDiv, .numberDiv {
+        .buttonDiv, .timerDiv, .numberDiv, .statsDiv {
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 20px 0;
+            flex-wrap: wrap;
         }
         .startButton, .submitButton, .exitButton, .retryButton, .guessAnswer {
             font-family: Motley;
@@ -42,64 +47,46 @@
             padding: 12px;
             margin: 10px;
         }
+        .numberDiv, .timerDiv, .statsDiv {
+            background-color: white;
+            color: #8576FF;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+        }
         .numberDiv {
-            background-color: white;
-            color: #8576FF;
-            border-radius: 12px;
-            padding: 20px;
-            width: 50%;
-            max-width: 600px;
-            text-align: center;
+            max-width: 100%;
         }
-        .timerDiv {
-            background-color: white;
-            color: #8576FF;
-            border-radius: 12px;
-            padding: 20px;
-            width: 200px;
-            text-align: center;
-            position: absolute;
-            top: 20%;
-        }
-        .statsDiv {
-            background-color: white;
-            color: #8576FF;
-            border-radius: 12px;
-            padding: 20px;
-            width: 200px;
-            text-align: center;
-            position: absolute;
-            top: 5%;
-            flex-direction: column;
+        .timerDiv, .statsDiv {
+            max-width: 300px;
         }
         .guessAnswer {
             display: none;
             font-size: 24px;
             text-align: center;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
         }
         @media only screen and (max-width: 768px) {
             .startButton, .submitButton, .exitButton, .retryButton {
                 width: 100px;
                 height: 50px;
                 font-size: 18px;
-                position:absolute;
-                top:70%;
-            }
-            .numberDiv {
-                width: 100%;
-                position:absolute;
-                top:50%;
-            }
-            .timerDiv, .statsDiv {
-                width: 100px;
-                font-size: 14px;
-            }
-            .statsDiv{
-                Position:absolute;
-                top:2%;
             }
             .guessAnswer {
                 font-size: 18px;
+            }
+        }
+        @media only screen and (max-width: 480px) {
+            .startButton, .submitButton, .exitButton, .retryButton {
+                width: 80px;
+                height: 40px;
+                font-size: 16px;
+            }
+            .guessAnswer {
+                font-size: 16px;
             }
         }
     </style>
@@ -107,12 +94,12 @@
 <body>
     <div class="boxDiv">
         <div class="statsDiv">
-            <p class="points" id="pointsID">Points: 0</p>
+            <p class="points" id="pointsID" style="margin-right:50px;">Points: 0</p>
             <p class="lives" id="livesID">Lives: 3</p>
         </div>
 
         <div class="timerDiv" id="timerDivID">
-            <h1 class="Timer" style="margin-right: 10px;">Timer: </h1><br>
+            <h1 class="Timer" style="margin-right: 10px;">Timer:</h1>
             <h1 class="Timer" id="countdownTimer"></h1>
         </div>
 
@@ -226,10 +213,11 @@
             Points = 0;
             document.getElementById('randomNumber').innerHTML = "";
             document.getElementById('pointsID').innerHTML = "Points: " + Points;
-        document.getElementById('livesID').innerHTML = "Lives: " + Lives;
-        document.getElementById('exitID').style.display = "none";
-        document.getElementById('retryID').style.display = "none";
-        document.getElementById('startID').style.display = "flex";
-    }
-</script>
+            document.getElementById('livesID').innerHTML = "Lives: " + Lives;
+            document.getElementById('exitID').style.display = "none";
+            document.getElementById('retryID').style.display = "none";
+            document.getElementById('startID').style.display = "flex";
+        }
+    </script>
+</body>
 </html>
